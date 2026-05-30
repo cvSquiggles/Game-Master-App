@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: gmapp
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gamemaster?useSSL=false&serverTimezone=UTC
+    username: postgres
+    password: c!XJWZ5PJ%qeqo9
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
