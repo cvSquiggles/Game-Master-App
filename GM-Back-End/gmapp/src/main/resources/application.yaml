@@ -3,12 +3,24 @@ spring:
     name: gmapp
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/gamemaster?useSSL=false&serverTimezone=UTC
+    url: jdbc:postgresql://localhost:5432/gamemaster
     username: postgres
     password: c!XJWZ5PJ%qeqo9
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: none #Set to 'none' to prevent Hibernate from managing the schema which conflicts with Flyway
+      show-sql: true
+
+  #Added explicit flyway enable just in case, don't know if this is necessary
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://localhost:5432/gamemaster
+    user: postgres
+    password: c!XJWZ5PJ%qeqo9
+    locations: classpath:db/migration
+
+  logging:
+    level:
+      org.flywaydb: DEBUG
