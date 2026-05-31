@@ -9,6 +9,7 @@ import java.util.UUID;
 
 /**
  * The GameTemplate class represents a game template entity in the application. It is annotated with @Entity to indicate that it is a JPA entity and @Table to specify the corresponding database table name.
+ * This will be a parent record containing a configuration of game components that can be loaded to quickly set up a new game session.
  */
 @Entity
 @Table(name = "game_template")
