@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class GameSessionService {
@@ -22,6 +23,10 @@ public class GameSessionService {
     public Optional<GameSession> getGameSessionBySessionCode(String sessionCode)
     {
         return gameSessionRepository.findBySessionCode(sessionCode);
+    }
+
+    public Optional<GameSession> findById(UUID id) {
+        return gameSessionRepository.findById(id);
     }
 
     public GameSession saveGameSession(GameSession gameSession)
