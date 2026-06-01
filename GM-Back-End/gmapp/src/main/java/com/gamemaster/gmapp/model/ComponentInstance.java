@@ -1,6 +1,8 @@
 package com.gamemaster.gmapp.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
@@ -29,6 +31,7 @@ public class ComponentInstance {
     @Column(name = "label")
     private String label;
 
+    @JdbcTypeCode(SqlTypes.JSON) //Included this to tell Hibernate to use the correct type for the JSONB column when communicating with the database.
     @Column(name = "config", columnDefinition = "jsonb")
     private String config;
 
