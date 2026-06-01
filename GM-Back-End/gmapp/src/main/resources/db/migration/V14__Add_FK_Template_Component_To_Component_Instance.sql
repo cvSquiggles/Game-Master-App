@@ -1,0 +1,1 @@
+ALTER TABLE component_instance ADD CONSTRAINT fk_template_component FOREIGN KEY (template_component_id) REFERENCES template_component(id) ON DELETE SET NULL;
