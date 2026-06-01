@@ -5,6 +5,8 @@ import com.gamemaster.gmapp.repository.GameTemplateRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class GameTemplateService {
@@ -35,5 +37,9 @@ public class GameTemplateService {
     public GameTemplate saveTemplate(GameTemplate gameTemplate)
     {
         return gameTemplateRepository.save(gameTemplate);
+    }
+
+    public Optional<GameTemplate> findById(UUID gameTemplateId) {
+        return gameTemplateRepository.findById(gameTemplateId);
     }
 }
