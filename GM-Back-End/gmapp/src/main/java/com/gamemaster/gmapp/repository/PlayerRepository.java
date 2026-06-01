@@ -1,9 +1,8 @@
 package com.gamemaster.gmapp.repository;
 
-import com.gamemaster.gmapp.Player;
+import com.gamemaster.gmapp.model.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public interface PlayerRepository extends JpaRepository<Player, UUID> {

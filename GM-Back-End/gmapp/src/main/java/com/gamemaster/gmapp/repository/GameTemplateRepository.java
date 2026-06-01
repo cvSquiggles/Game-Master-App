@@ -1,6 +1,6 @@
 package com.gamemaster.gmapp.repository;
 
-import com.gamemaster.gmapp.GameTemplate;
+import com.gamemaster.gmapp.model.GameTemplate;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

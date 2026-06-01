@@ -1,6 +1,6 @@
 package com.gamemaster.gmapp.controller;
 
-import com.gamemaster.gmapp.GameTemplate;
+import com.gamemaster.gmapp.model.GameTemplate;
 import com.gamemaster.gmapp.service.GameTemplateService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

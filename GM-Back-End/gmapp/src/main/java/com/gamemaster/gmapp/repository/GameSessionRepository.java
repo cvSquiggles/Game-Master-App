@@ -1,6 +1,6 @@
 package com.gamemaster.gmapp.repository;
 
-import com.gamemaster.gmapp.GameSession;
+import com.gamemaster.gmapp.model.GameSession;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

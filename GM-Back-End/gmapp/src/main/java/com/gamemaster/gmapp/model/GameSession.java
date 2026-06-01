@@ -1,4 +1,4 @@
-package com.gamemaster.gmapp;
+package com.gamemaster.gmapp.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;

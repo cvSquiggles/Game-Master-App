@@ -1,6 +1,6 @@
 package com.gamemaster.gmapp.service;
 
-import com.gamemaster.gmapp.GameTemplate;
+import com.gamemaster.gmapp.model.GameTemplate;
 import com.gamemaster.gmapp.repository.GameTemplateRepository;
 import org.springframework.stereotype.Service;
 

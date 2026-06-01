@@ -1,7 +1,7 @@
 package com.gamemaster.gmapp.service;
 
-import com.gamemaster.gmapp.GameSession;
-import com.gamemaster.gmapp.Player;
+import com.gamemaster.gmapp.model.GameSession;
+import com.gamemaster.gmapp.model.Player;
 import com.gamemaster.gmapp.dto.CreatePlayerRequest;
 import com.gamemaster.gmapp.repository.PlayerRepository;
 import org.springframework.stereotype.Service;

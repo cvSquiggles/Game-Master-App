@@ -1,6 +1,6 @@
 package com.gamemaster.gmapp.service;
 
-import com.gamemaster.gmapp.GameSession;
+import com.gamemaster.gmapp.model.GameSession;
 import com.gamemaster.gmapp.repository.GameSessionRepository;
 import org.springframework.stereotype.Service;
 

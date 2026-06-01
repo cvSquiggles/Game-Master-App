@@ -1,4 +1,4 @@
-package com.gamemaster.gmapp;
+package com.gamemaster.gmapp.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,9 +15,7 @@ import java.util.UUID;
 @Table(name = "game_template")
 public class GameTemplate {
 
-    public GameTemplate() {
-        //No args constructor, apparently this is necessary for Springboot's Jackson to work properly when deserializing JSON into Java objects.
-    };
+   //No args constructor removed, this was never actually necessary (only when we have other arg constructors)
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -1,6 +1,6 @@
 package com.gamemaster.gmapp.controller;
 
-import com.gamemaster.gmapp.GameSession;
+import com.gamemaster.gmapp.model.GameSession;
 import com.gamemaster.gmapp.service.GameSessionService;
 import org.springframework.web.bind.annotation.*;
 
