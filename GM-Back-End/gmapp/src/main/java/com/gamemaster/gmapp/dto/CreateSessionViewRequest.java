@@ -1,28 +1,27 @@
 package com.gamemaster.gmapp.dto;
 
-import com.gamemaster.gmapp.model.GameTemplate;
+import com.gamemaster.gmapp.model.GameSession;
 import jakarta.persistence.*;
 
 import java.util.UUID;
 
-public class CreateTemplateViewRequest {
+public class CreateSessionViewRequest {
 
-    private UUID gameTemplateId;
+    private UUID gameSessionId;
 
     private String name;
 
-    private String icon; // Store the icon as a string (e.g., a path to the image)
+    private String icon;
 
-    private int displayOrder; // The order in which the view should be displayed in the UI
+    private int displayOrder;
 
-    //Getters and setters
-
-    public UUID getGameTemplateId() {
-        return gameTemplateId;
+    //Getters and Setters
+    public UUID getGameSessionId() {
+        return gameSessionId;
     }
 
-    public void setGameTemplateId(UUID gameTemplateId) {
-        this.gameTemplateId = gameTemplateId;
+    public void setGameSessionId(UUID gameSessionId) {
+        this.gameSessionId = gameSessionId;
     }
 
     public String getName() {
@@ -48,4 +47,5 @@ public class CreateTemplateViewRequest {
     public void setDisplayOrder(int displayOrder) {
         this.displayOrder = displayOrder;
     }
+
 }
