@@ -3,10 +3,15 @@ package com.gamemaster.gmapp.service;
 import com.gamemaster.gmapp.dto.CreateSessionViewRequest;
 import com.gamemaster.gmapp.model.GameSession;
 import com.gamemaster.gmapp.model.SessionView;
+import com.gamemaster.gmapp.model.TemplateView;
 import com.gamemaster.gmapp.repository.SessionViewRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
+@Service
 public class SessionViewService {
 
     private SessionViewRepository sessionViewRepository;
@@ -19,6 +24,10 @@ public class SessionViewService {
 
     public List<SessionView> getAllSessionViews() {
         return sessionViewRepository.findAll();
+    }
+
+    public Optional<SessionView> findById(UUID id) {
+        return sessionViewRepository.findById(id);
     }
 
     public SessionView saveSessionView(CreateSessionViewRequest createSessionViewRequest) {

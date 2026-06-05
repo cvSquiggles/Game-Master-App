@@ -22,8 +22,9 @@ public class ComponentInstance {
     @JoinColumn(name = "owner_player_id")
     private Player ownerPlayer;
 
-    @Column(name = "template_component_id")
-    private UUID templateComponentId;
+    @ManyToOne
+    @JoinColumn(name = "template_component_id")
+    private TemplateComponent templateComponent;
 
     @Column(name = "component_type")
     private String componentType;
@@ -63,12 +64,12 @@ public class ComponentInstance {
         this.ownerPlayer = ownerPlayer;
     }
 
-    public UUID getTemplateComponentId() {
-        return templateComponentId;
+    public TemplateComponent getTemplateComponent() {
+        return templateComponent;
     }
 
-    public void setTemplateComponentId(UUID templateComponentId) {
-        this.templateComponentId = templateComponentId;
+    public void setTemplateComponent(TemplateComponent templateComponent) {
+        this.templateComponent = templateComponent;
     }
 
     public String getComponentType() {
