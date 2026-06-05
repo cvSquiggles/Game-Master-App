@@ -1,11 +1,14 @@
 package com.gamemaster.gmapp.controller;
 
+import com.gamemaster.gmapp.dto.SaveGameSessionRequest;
 import com.gamemaster.gmapp.model.GameSession;
 import com.gamemaster.gmapp.service.GameSessionService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class GameSessionController {
@@ -23,8 +26,13 @@ public class GameSessionController {
         return gameSessionService.getGameSessionBySessionCode(sessionCode);
     }
 
-    @PostMapping("/api/game-sessions")
-    public GameSession saveGameSession(@RequestBody GameSession gameSession) {
-        return gameSessionService.saveGameSession(gameSession);
+    @PostMapping("/api/game-sessions/create")
+    public GameSession createGameSession(@RequestBody GameSession gameSession) {
+        return gameSessionService.createGameSession(gameSession);
+    }
+
+    @PostMapping("/api/game-sessions/{id}/save")
+    public ResponseEntity<GameSession> saveGameSession(@PathVariable UUID id, @RequestBody SaveGameSessionRequest request) {
+        return gameSessionService.saveGameSession(id, request);
     }
 }

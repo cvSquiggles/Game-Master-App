@@ -1,10 +1,14 @@
 package com.gamemaster.gmapp.service;
 
+import com.gamemaster.gmapp.controller.GameSessionController;
+import com.gamemaster.gmapp.dto.SaveGameSessionRequest;
 import com.gamemaster.gmapp.model.GameSession;
 import com.gamemaster.gmapp.repository.GameSessionRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,10 +39,35 @@ public class GameSessionService {
         return gameSessionRepository.findById(id);
     }
 
-    public GameSession saveGameSession(GameSession gameSession)
+    /**
+     * Using ResponseEntity return type allows returning a 409 error if the active session token submitted is invalid
+     * @param id this is the id of the game session that we're attempting to update
+     * @param request this contains the active session token that the save is being submitted from, so to speak
+     * @return ReponseEntity<GameSession> - Empty 409 if failed token validation, otherwise a 200 containing the result of the save in the body
+     */
+    public ResponseEntity<GameSession> saveGameSession(UUID id, SaveGameSessionRequest request)
+    {
+        //First off, we need to look up the game session associated with the id provided
+        GameSession gameSession = gameSessionRepository.findById(id).orElseThrow(()-> new RuntimeException("Failed to find game session corresponding to the id: " + id + " while attempting to save a game."));
+
+        //Then check to see if the active session token submitted in the request matches the one on the game session in the database
+        if(!gameSession.getActiveSessionToken().equals(request.getActiveSessionToken()))
+        {
+            return ResponseEntity.status(409).build(); //The token is stale and/or incorrect
+        }
+
+        //TODO: Currently not actually applying any of the JSONBlob game state change stuff, but will eventually need to go here since save currently does nothing meaningful.
+
+        gameSession.setLastActiveAt(LocalDateTime.now()); //Update to the time of this save
+
+        return ResponseEntity.ok(gameSessionRepository.save(gameSession));
+    }
+
+    public GameSession createGameSession(GameSession gameSession)
     {
         String sessionCode = generateGameSessionCode(); //Generate a unique random session code for this game
         gameSession.setSessionCode(sessionCode);
+        gameSession.setActiveSessionToken(UUID.randomUUID());
 
         return gameSessionRepository.save(gameSession);
     }
