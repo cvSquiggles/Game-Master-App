@@ -19,7 +19,7 @@ public class TemplateViewComponent {
 
     @MapsId("templateComponentId")
     @ManyToOne
-    @JoinColumn(name = "template_compoonent_id")
+    @JoinColumn(name = "template_component_id")
     private TemplateComponent templateComponent;
 
     @Column(name = "position")

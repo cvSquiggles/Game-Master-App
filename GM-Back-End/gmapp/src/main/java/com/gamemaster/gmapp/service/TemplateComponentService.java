@@ -3,10 +3,13 @@ package com.gamemaster.gmapp.service;
 import com.gamemaster.gmapp.dto.CreateTemplateComponentRequest;
 import com.gamemaster.gmapp.model.GameTemplate;
 import com.gamemaster.gmapp.model.TemplateComponent;
+import com.gamemaster.gmapp.model.TemplateView;
 import com.gamemaster.gmapp.repository.TemplateComponentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TemplateComponentService {
@@ -20,6 +23,10 @@ public class TemplateComponentService {
 
     public List<TemplateComponent> getAllTemplateComponents() {
         return templateComponentRepository.findAll();
+    }
+
+    public Optional<TemplateComponent> findById(UUID id) {
+        return templateComponentRepository.findById(id);
     }
 
     public TemplateComponent saveTemplateComponent(CreateTemplateComponentRequest request) {

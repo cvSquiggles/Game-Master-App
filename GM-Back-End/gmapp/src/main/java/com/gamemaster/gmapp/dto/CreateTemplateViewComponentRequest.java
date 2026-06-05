@@ -31,11 +31,11 @@ public class CreateTemplateViewComponentRequest {
         this.templateComponentId = templateComponentId;
     }
 
-    public UUID getTemplateView() {
+    public UUID getTemplateViewId() {
         return templateViewId;
     }
 
-    public void setTemplateView(UUID templateViewId) {
+    public void setTemplateViewId(UUID templateViewId) {
         this.templateViewId = templateViewId;
     }
 

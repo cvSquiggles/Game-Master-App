@@ -13,9 +13,9 @@ public class TemplateViewComponentId {
     private UUID templateComponentId;
 
     //Apparently all @Embeddable classes require a default constructor explicitly defined according to the JPA specification.
-    public void TemplateViewComponent(){}
+    public TemplateViewComponentId(){}
 
-    public void TemplateViewComponent(UUID viewId, UUID templateComponentId) {
+    public TemplateViewComponentId(UUID viewId, UUID templateComponentId) {
         this.viewId = viewId;
         this.templateComponentId = templateComponentId;
     }

@@ -8,6 +8,8 @@ import com.gamemaster.gmapp.repository.TemplateViewRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TemplateViewService {
@@ -22,6 +24,10 @@ public class TemplateViewService {
     
     public List<TemplateView> getAllTemplateViews() {
         return templateViewRepository.findAll();
+    }
+
+    public Optional<TemplateView> findById(UUID id) {
+        return templateViewRepository.findById(id);
     }
     
     public TemplateView saveTemplateView(CreateTemplateViewRequest createTemplateViewRequest) {
