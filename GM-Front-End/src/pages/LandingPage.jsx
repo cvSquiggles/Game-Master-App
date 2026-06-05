@@ -16,9 +16,25 @@ export function LandingPage() {
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({ name: gameName, status: 'active'})
         })
+
         const session = await response.json()
 
+        //Then create player 1
+        await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/players`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId: session.id, displayName: player1, isGameMaster: false, turnOrder: 1 })
+        })
+
+        await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/players`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId: session.id, displayName: player2, isGameMaster: false, turnOrder: 2 })
+        })
+
         console.log(session); //Log response
+        //After the game session is created, we navigate to the /play view to render the game session
+        navigate('/play', { state: { session } })
     }
 
 
