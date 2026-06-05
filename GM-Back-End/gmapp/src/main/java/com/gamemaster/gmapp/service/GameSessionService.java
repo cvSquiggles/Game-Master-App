@@ -1,7 +1,7 @@
 package com.gamemaster.gmapp.service;
 
-import com.gamemaster.gmapp.controller.GameSessionController;
 import com.gamemaster.gmapp.dto.SaveGameSessionRequest;
+import com.gamemaster.gmapp.model.GameSave;
 import com.gamemaster.gmapp.model.GameSession;
 import com.gamemaster.gmapp.repository.GameSessionRepository;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +22,23 @@ public class GameSessionService {
     private static final SecureRandom secureRandom = new SecureRandom();
 
     private GameSessionRepository gameSessionRepository;
+    private GameSaveService gameSaveService;
 
-    public GameSessionService(GameSessionRepository gameSessionRepository) { this.gameSessionRepository = gameSessionRepository; }
+    public GameSessionService(GameSessionRepository gameSessionRepository,
+                              GameSaveService gameSaveService)
+    {
+        this.gameSessionRepository = gameSessionRepository;
+        this.gameSaveService = gameSaveService;
+    }
 
     public List<GameSession> getAllGameSessions()
     {
         return gameSessionRepository.findAll();
+    }
+
+    public List<GameSave> findByGameSession_Id(UUID id)
+    {
+        return gameSaveService.findByGameSession_Id(id);
     }
 
     public Optional<GameSession> getGameSessionBySessionCode(String sessionCode)
@@ -56,7 +67,7 @@ public class GameSessionService {
             return ResponseEntity.status(409).build(); //The token is stale and/or incorrect
         }
 
-        //TODO: Currently not actually applying any of the JSONBlob game state change stuff, but will eventually need to go here since save currently does nothing meaningful.
+        gameSaveService.createGameSave(gameSession, request, GameSaveService.SaveType.MANUAL.getSaveType()); //Pass the gameSession we found in so we this method doesn't have to look it up, and the request containing the JSON blob, did save type as an enum mostly for fun
 
         gameSession.setLastActiveAt(LocalDateTime.now()); //Update to the time of this save
 

@@ -1,13 +1,15 @@
 package com.gamemaster.gmapp.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/*This Entity doesn't need a DTO to handle the GameSession association, because we'll only ever attempt to save after having
+ already pulled the GameSession to check the active_session_token, so we can just pass that in with the save request*/
 @Entity
 @Table(name = "game_save")
 public class GameSave {
@@ -27,6 +29,7 @@ public class GameSave {
     @Column(name = "state_blob", columnDefinition = "jsonb")
     private String stateBlob;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

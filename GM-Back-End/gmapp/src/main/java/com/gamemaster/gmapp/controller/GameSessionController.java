@@ -1,6 +1,7 @@
 package com.gamemaster.gmapp.controller;
 
 import com.gamemaster.gmapp.dto.SaveGameSessionRequest;
+import com.gamemaster.gmapp.model.GameSave;
 import com.gamemaster.gmapp.model.GameSession;
 import com.gamemaster.gmapp.service.GameSessionService;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,17 @@ public class GameSessionController {
     @GetMapping("/api/game-sessions/{gameSessionCode}")
     public Optional<GameSession> getGameSessionBySessionCode(@PathVariable String gameSessionCode) {
         return gameSessionService.getGameSessionBySessionCode(gameSessionCode);
+    }
+
+    /**
+     * Return all the save states for a given game session id
+     * @param id
+     * @return
+     */
+    @GetMapping("/api/game-sessions/{id}/saves")
+    public List<GameSave> getGameSavesBySessionId(@PathVariable UUID id)
+    {
+        return gameSessionService.findByGameSession_Id(id);
     }
 
     //Note: this is a post mapping despite being a load because it updates the active_session_token, and last_update_stamp on the game session

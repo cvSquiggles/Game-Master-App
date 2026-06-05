@@ -1,31 +1,55 @@
 package com.gamemaster.gmapp.service;
 
-import com.gamemaster.gmapp.dto.CreateGameSaveRequest;
+import com.gamemaster.gmapp.dto.SaveGameSessionRequest;
 import com.gamemaster.gmapp.model.GameSave;
 import com.gamemaster.gmapp.model.GameSession;
 import com.gamemaster.gmapp.repository.GameSaveRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 public class GameSaveService {
 
     private GameSaveRepository gameSaveRepository;
-    private GameSessionService gameSessionService;
 
-    public GameSaveService(GameSaveRepository gameSaveRepository,
-                           GameSessionService gameSessionService)
-    {
-        this.gameSaveRepository = gameSaveRepository;
-        this.gameSessionService = gameSessionService;
+    public enum SaveType {
+        MANUAL("Manual"),
+        AUTO("Auto");
+
+        private final String saveType;
+
+        SaveType(String saveType)
+        {
+            this.saveType = saveType;
+        }
+
+        public String getSaveType() {
+            return this.saveType;
+        }
     }
 
-    public GameSave createGameSave(CreateGameSaveRequest request)
+    public GameSaveService(GameSaveRepository gameSaveRepository)
     {
-        GameSession gameSession = gameSessionService.findById(request.getGameSessionId()).orElseThrow(() -> new RuntimeException("No game session found with id: " + request.getGameSessionId() + " when attempting to save game state."));
+        this.gameSaveRepository = gameSaveRepository;
+    }
 
+    public List<GameSave> findAllGameSaves()
+    {
+        return gameSaveRepository.findAll();
+    }
+
+    public List<GameSave> findByGameSession_Id(UUID id)
+    {
+        return gameSaveRepository.findByGameSession_Id(id);
+    }
+
+    public GameSave createGameSave(GameSession gameSession, SaveGameSessionRequest request, String saveType)
+    {
         GameSave gameSave = new GameSave();
         gameSave.setGameSession(gameSession);
-        gameSave.setSaveType(request.getSaveType());
+        gameSave.setSaveType(saveType);
         gameSave.setStateBlob(request.getStateBlob());
         //I don't need to explicilty set the created_at value here because the database is set to default it to the time of record creation
 
