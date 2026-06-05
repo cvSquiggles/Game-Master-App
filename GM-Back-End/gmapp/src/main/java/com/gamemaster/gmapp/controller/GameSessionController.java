@@ -16,16 +16,24 @@ public class GameSessionController {
 
     public GameSessionController(GameSessionService gameSessionService) { this.gameSessionService = gameSessionService; }
 
+    //Get Mappings
     @GetMapping("/api/game-sessions")
     public List<GameSession> getAllGameSessions() {
         return gameSessionService.getAllGameSessions();
     }
 
-    @GetMapping("/api/game-sessions/{sessionCode}")
-    public Optional<GameSession> getGameSessionBySessionCode(@PathVariable String sessionCode) {
-        return gameSessionService.getGameSessionBySessionCode(sessionCode);
+    @GetMapping("/api/game-sessions/{gameSessionCode}")
+    public Optional<GameSession> getGameSessionBySessionCode(@PathVariable String gameSessionCode) {
+        return gameSessionService.getGameSessionBySessionCode(gameSessionCode);
     }
 
+    //Note: this is a post mapping despite being a load because it updates the active_session_token, and last_update_stamp on the game session
+    @PostMapping("/api/game-sessions/{gameSessionCode}/load")
+    public GameSession loadGameSession(@PathVariable String gameSessionCode) {
+        return gameSessionService.loadGameSession(gameSessionCode);
+    }
+
+    //Post Mappings
     @PostMapping("/api/game-sessions/create")
     public GameSession createGameSession(@RequestBody GameSession gameSession) {
         return gameSessionService.createGameSession(gameSession);
