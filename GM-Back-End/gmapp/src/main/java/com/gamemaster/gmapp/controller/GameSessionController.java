@@ -13,17 +13,17 @@ public class GameSessionController {
 
     public GameSessionController(GameSessionService gameSessionService) { this.gameSessionService = gameSessionService; }
 
-    @GetMapping("/api/gamesessions")
+    @GetMapping("/api/game-sessions")
     public List<GameSession> getAllGameSessions() {
         return gameSessionService.getAllGameSessions();
     }
 
-    @GetMapping("/api/gamesessions/{sessionCode}")
+    @GetMapping("/api/game-sessions/{sessionCode}")
     public Optional<GameSession> getGameSessionBySessionCode(@PathVariable String sessionCode) {
         return gameSessionService.getGameSessionBySessionCode(sessionCode);
     }
 
-    @PostMapping("/api/gamesessions")
+    @PostMapping("/api/game-sessions")
     public GameSession saveGameSession(@RequestBody GameSession gameSession) {
         return gameSessionService.saveGameSession(gameSession);
     }
