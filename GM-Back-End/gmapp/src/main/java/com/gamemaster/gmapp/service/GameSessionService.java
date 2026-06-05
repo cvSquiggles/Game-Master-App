@@ -36,6 +36,20 @@ public class GameSessionService {
         return gameSessionRepository.findAll();
     }
 
+    /**
+     * This allows the API to just use the gameSessionCode, and handle the ID lookup on the backend. UUIDs for games are messy, want to keep front side as clean as possible.
+     * @param gameSessionCode
+     * @return
+     */
+    public List<GameSave> findByGameSessionCode(String gameSessionCode)
+    {
+        GameSession gameSession = gameSessionRepository.findBySessionCode(gameSessionCode).orElseThrow(()-> new RuntimeException("No game session found matching the session code: " +
+                gameSessionCode + " when attempting to find the list of existing saves for the provided code." ));
+
+        return findByGameSession_Id(gameSession.getId());
+
+    }
+
     public List<GameSave> findByGameSession_Id(UUID id)
     {
         return gameSaveService.findByGameSession_Id(id);
@@ -52,14 +66,14 @@ public class GameSessionService {
 
     /**
      * Using ResponseEntity return type allows returning a 409 error if the active session token submitted is invalid
-     * @param id this is the id of the game session that we're attempting to update
+     * @param gameSessionCode this is the session code of the game session that we're attempting to create a save for
      * @param request this contains the active session token that the save is being submitted from, so to speak
      * @return ReponseEntity<GameSession> - Empty 409 if failed token validation, otherwise a 200 containing the result of the save in the body
      */
-    public ResponseEntity<GameSession> saveGameSession(UUID id, SaveGameSessionRequest request)
+    public ResponseEntity<GameSession> saveGameSession(String gameSessionCode, SaveGameSessionRequest request)
     {
         //First off, we need to look up the game session associated with the id provided
-        GameSession gameSession = gameSessionRepository.findById(id).orElseThrow(()-> new RuntimeException("Failed to find game session corresponding to the id: " + id + " while attempting to save a game."));
+        GameSession gameSession = gameSessionRepository.findBySessionCode(gameSessionCode).orElseThrow(()-> new RuntimeException("Failed to find game session corresponding to the gameSessionCode: " + gameSessionCode + " while attempting to save a game."));
 
         //Then check to see if the active session token submitted in the request matches the one on the game session in the database
         if(!gameSession.getActiveSessionToken().equals(request.getActiveSessionToken()))

@@ -30,13 +30,13 @@ public class GameSessionController {
 
     /**
      * Return all the save states for a given game session id
-     * @param id
+     * @param gameSessionCode
      * @return
      */
-    @GetMapping("/api/game-sessions/{id}/saves")
-    public List<GameSave> getGameSavesBySessionId(@PathVariable UUID id)
+    @GetMapping("/api/game-sessions/{gameSessionCode}/saves")
+    public List<GameSave> getGameSavesBySessionId(@PathVariable String gameSessionCode)
     {
-        return gameSessionService.findByGameSession_Id(id);
+        return gameSessionService.findByGameSessionCode(gameSessionCode);
     }
 
     //Note: this is a post mapping despite being a load because it updates the active_session_token, and last_update_stamp on the game session
@@ -51,8 +51,8 @@ public class GameSessionController {
         return gameSessionService.createGameSession(gameSession);
     }
 
-    @PostMapping("/api/game-sessions/{id}/save")
-    public ResponseEntity<GameSession> saveGameSession(@PathVariable UUID id, @RequestBody SaveGameSessionRequest request) {
-        return gameSessionService.saveGameSession(id, request);
+    @PostMapping("/api/game-sessions/{gameSessionCode}/save")
+    public ResponseEntity<GameSession> saveGameSession(@PathVariable String gameSessionCode, @RequestBody SaveGameSessionRequest request) {
+        return gameSessionService.saveGameSession(gameSessionCode, request);
     }
 }
