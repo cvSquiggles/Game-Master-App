@@ -3,25 +3,26 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
+//View imports
+import { LandingPage } from './pages/LandingPage'
+import { PlayView } from './pages/PlayView'
 
   function App() {
-  const [count, setCount] = useState(0)
-  const [output, setOutput] = useState("");
+    return (
+      <BrowserRouter>
+          {/* Routes */}
+          <Routes>
 
-  useEffect(()=> {
-    console.log("It's triggered!");
-    fetch('http://localhost:8080/api/mic')
-      .then(response => response.text())
-      .then(text => setOutput(text))
-  });
+            <Route path="/" element={<LandingPage />} />
 
-  return (
-    <>
-      {
-        <p>{output}</p>
-      }
-    </>
-  )
+            <Route path="/play" element={<PlayView />} />
+
+          </Routes>
+      
+      </BrowserRouter>
+    )
 }
 
 export default App
