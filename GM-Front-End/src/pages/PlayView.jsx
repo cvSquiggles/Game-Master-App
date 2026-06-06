@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
 import useGameStore from '../store/useGameStore'
+import ScoreTracker from '../components/ScoreTracker'
 
 export function PlayView() {
     const location = useLocation()
@@ -67,6 +68,9 @@ export function PlayView() {
                     </div>
                 ))}
             </div>
+            <br/>
+            <br/>
+            {players.length > 0 && <ScoreTracker player={players[0]} />}
         </div>
         </div>
     );
