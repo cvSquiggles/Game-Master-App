@@ -26,6 +26,7 @@ export function LandingPage() {
             body: JSON.stringify({ sessionId: session.id, displayName: player1, isGameMaster: false, turnOrder: 1 })
         })
 
+        //And 2
         await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/players`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

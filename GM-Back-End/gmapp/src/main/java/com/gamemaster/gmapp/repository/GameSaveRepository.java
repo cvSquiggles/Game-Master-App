@@ -9,4 +9,6 @@ import java.util.UUID;
 
 public interface GameSaveRepository extends JpaRepository<GameSave, UUID> {
     List<GameSave> findByGameSession_Id(UUID sessionId); //Need derived query method to get all game saves by a provided game session id
+
+    List<GameSave> findByGameSession_SessionCode(String gameSessionCode); //Derived query to pull game session via game session code
 }

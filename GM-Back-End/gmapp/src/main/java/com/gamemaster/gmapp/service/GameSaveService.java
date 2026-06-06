@@ -14,6 +14,10 @@ public class GameSaveService {
 
     private GameSaveRepository gameSaveRepository;
 
+    public List<GameSave> findByGameSession_SessionCode(String gameSessionCode) {
+        return gameSaveRepository.findByGameSession_SessionCode(gameSessionCode);
+    }
+
     public enum SaveType {
         MANUAL("Manual"),
         AUTO("Auto");

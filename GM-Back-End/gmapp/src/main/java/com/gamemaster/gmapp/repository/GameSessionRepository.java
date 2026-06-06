@@ -1,7 +1,10 @@
 package com.gamemaster.gmapp.repository;
 
+import com.gamemaster.gmapp.model.GameSave;
 import com.gamemaster.gmapp.model.GameSession;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 import java.util.Optional;
 
 import java.util.UUID;

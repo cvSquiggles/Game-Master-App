@@ -43,11 +43,7 @@ public class GameSessionService {
      */
     public List<GameSave> findByGameSessionCode(String gameSessionCode)
     {
-        GameSession gameSession = gameSessionRepository.findBySessionCode(gameSessionCode).orElseThrow(()-> new RuntimeException("No game session found matching the session code: " +
-                gameSessionCode + " when attempting to find the list of existing saves for the provided code." ));
-
-        return findByGameSession_Id(gameSession.getId());
-
+        return gameSaveService.findByGameSession_SessionCode(gameSessionCode);
     }
 
     public List<GameSave> findByGameSession_Id(UUID id)

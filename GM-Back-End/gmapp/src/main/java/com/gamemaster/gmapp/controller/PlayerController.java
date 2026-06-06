@@ -23,9 +23,16 @@ public class PlayerController {
     }
 
     // Endpoint to retrieve a specific player by their unique ID, delegating to the service layer
-    @GetMapping("/api/players/{id}")
+    @GetMapping("/api/players/search/{id}")
     public Optional<Player> findById(@PathVariable UUID id) {
         return playerService.findById(id);
+    }
+
+    //Find all players associated with a game session code
+    @GetMapping("/api/players/game/{gameSessionCode}")
+    public List<Player> getPlayersByGameSessionCode(@PathVariable String gameSessionCode)
+    {
+        return playerService.getPlayersByGameSessionCode(gameSessionCode);
     }
 
     /* Endpoint to create a new player, delegating to the service layer. Because session_id on the GameSession Entity is

@@ -33,6 +33,12 @@ public class PlayerService {
         return playerRepository.findById(id);
     }
 
+    //Get all the players associated with a particular game session code
+    public List<Player> getPlayersByGameSessionCode(String gameSessionCode)
+    {
+        return playerRepository.findByGameSession_SessionCode(gameSessionCode);
+    }
+
     // Method to create a new player and save it to the database
     public Player createPlayer(CreatePlayerRequest createPlayerRequest) {
 
