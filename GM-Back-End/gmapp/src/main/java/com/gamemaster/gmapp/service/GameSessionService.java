@@ -109,7 +109,7 @@ public class GameSessionService {
         return gameSessionRepository.save(gameSession);
     }
 
-    private String generateGameSessionCode() {
+    public String generateGameSessionCode() {
         return generateGameSessionCode(1);
     }
 
