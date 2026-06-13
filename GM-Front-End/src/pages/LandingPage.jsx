@@ -10,12 +10,18 @@ export function LandingPage() {
 
     //function to handle game create api call
     const handleCreateGame = async () => {
+        try {
         //Create a session first
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/game-sessions/create`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({ name: gameName, status: 'active'})
         })
+
+        if(!response.ok)
+        {
+            throw new Error(`API Request Error creating session: ${response.status} - ${response.statusText}`)
+        }
 
         const session = await response.json()
 
@@ -26,6 +32,11 @@ export function LandingPage() {
             body: JSON.stringify({ sessionId: session.id, displayName: player1, isGameMaster: false, turnOrder: 1 })
         })
 
+        if(!response.ok)
+        {
+            throw new Error(`API Request Error creating player 1: ${response.status} - ${response.statusText}`)
+        }
+
         //And 2
         await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/players`, {
             method: 'POST',
@@ -33,9 +44,18 @@ export function LandingPage() {
             body: JSON.stringify({ sessionId: session.id, displayName: player2, isGameMaster: false, turnOrder: 2 })
         })
 
+        if(!response.ok)
+        {
+            throw new Error(`API Request Error createing player 2: ${response.status} - ${response.statusText}`)
+        }
+
         console.log(session); //Log response
         //After the game session is created, we navigate to the /play view to render the game session
         navigate('/play', { state: { session } })
+        }
+        catch(error) {
+            console.log(error.message)
+        }
     }
 
 
