@@ -1,18 +1,18 @@
 import { useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
-import useGameStore from '../store/useGameStore'
+import { useSelector, useDispatch } from 'react-redux' //Import useSelector (used to read state) and useDispatch (used to trigger state changes, rather than calling setters directly)
+import { setSession, setPlayers } from '../store/store'
 import ScoreTracker from '../components/ScoreTracker'
 
 export function PlayView() {
     const location = useLocation()
+    const dispatch = useDispatch() //variable used to trigger state changes
 
-    /*Create quick access setSession function from game store, as well as setActiveSessionToken, without these I'd have to type out
-    * useGameStore(state => state.session)(state.session), every time I wanted to use it. See easier implementation below.*/
-    const setSession = useGameStore(state => state.setSession)
-    const setPlayers = useGameStore(state => state.setPlayers)
+    //Converted zustand store to redux, these allow easy access to the session and players states in the redux store
+    const setSession = useSelector(state => state.game.session) //state.slice-name.state-variable
+    const setPlayers = useSelector(state => state.game.players)
     
-    const players = useGameStore(state => state.players)
-    const session = useGameStore(state => state.session) //Pull session from the global store
+    //Removed lines pulling setters from the zustand store, redux doesn't require pulling the setters directly
 
     //This should load the players associated with the current game
     const loadPlayers = async () => {
@@ -21,7 +21,7 @@ export function PlayView() {
         })
 
         const data = await response.json()
-        setPlayers(data)
+        dispatch(setPlayers(data)) //Replaced zustand setter call with redux dispatch setter
     }
 
     //This is a function that will be used to handle both manual and auto saves, added "useCallBack" so the function isn't recreated on every render of this component, bug was creating thousands of saves!
@@ -35,13 +35,13 @@ export function PlayView() {
                     stateBlob: JSON.stringify({ session, players})
                 })
         })
-    })
+    }, [session, players])
 
     useEffect(() => {
         //This is saying, if we have a state session from our React Router, then look into it...
         if (location.state?.session) {
             //...and then set the values in the global store equal to the values in the React Router state
-            setSession(location.state.session) //This is where we're calling the global store functions above to set the values on page load
+            dispatch(setSession(location.state.session)) //This is where we're calling the global store functions above to set the values on page load ~updated to redux dispatch setter
             loadPlayers()
         }
     }, [])
@@ -50,28 +50,28 @@ export function PlayView() {
         //This is an auto-save trigger defaulted to save the game state once every minute (TODO: customizable save interval later)
         const interval = setInterval(saveGame, 60000)
         return () => clearInterval(interval)
-    }, [])
+    }, [saveGame])
 
     return(
         <div>
-        <h1>Play View</h1>
-        <br/>
-        <br/>
-        <div id="sessionInfoDisplay">
-            <p>Game Code: {session?.name} <button onClick={saveGame}>Save Game</button></p>
-            <p>Session ID: {session?.id}</p>
-            <p>Session Code: {session?.sessionCode}</p>
-            <div id="playerCards">
-                {players.map(player => (
-                    <div key={player.id}>
-                        <p>Player {player.turnOrder}: {player.displayName}</p>
-                    </div>
-                ))}
+            <h1>Play View</h1>
+            <br/>
+            <br/>
+            <div id="sessionInfoDisplay">
+                <p>Game Code: {session?.name} <button onClick={saveGame}>Save Game</button></p>
+                <p>Session ID: {session?.id}</p>
+                <p>Session Code: {session?.sessionCode}</p>
+                <div id="playerCards">
+                    {players.map(player => (
+                        <div key={player.id}>
+                            <p>Player {player.turnOrder}: {player.displayName}</p>
+                        </div>
+                    ))}
+                </div>
+                <br/>
+                <br/>
+                {players.length > 0 && <ScoreTracker player={players[0]} />}
             </div>
-            <br/>
-            <br/>
-            {players.length > 0 && <ScoreTracker player={players[0]} />}
-        </div>
         </div>
     );
 }
