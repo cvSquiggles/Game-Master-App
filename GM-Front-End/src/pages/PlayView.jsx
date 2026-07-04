@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux' //Import useSelector (used to read state) and useDispatch (used to trigger state changes, rather than calling setters directly)
 import { setSession, setPlayers } from '../store/store'
@@ -9,8 +9,13 @@ export function PlayView() {
     const dispatch = useDispatch() //variable used to trigger state changes
 
     //Converted zustand store to redux, these allow easy access to the session and players states in the redux store
-    const setSession = useSelector(state => state.game.session) //state.slice-name.state-variable
-    const setPlayers = useSelector(state => state.game.players)
+    const session = useSelector(state => state.game.session) //state.slice-name.state-variable
+    const players = useSelector(state => state.game.players)
+
+    const stateRef = useRef({ session, players }) //this allows us to access a reference to the current state, rather than having a local and potentially stale version of the state value
+    useEffect(() => {
+        stateRef.current = { session, players }
+    }, [session, players]) //update stateRef.current whenever session, or players gets updated
     
     //Removed lines pulling setters from the zustand store, redux doesn't require pulling the setters directly
 
@@ -26,8 +31,9 @@ export function PlayView() {
 
     //This is a function that will be used to handle both manual and auto saves, added "useCallBack" so the function isn't recreated on every render of this component, bug was creating thousands of saves!
     const saveGame = useCallback(async () => {
+        const { session, players } = stateRef.current
         console.log("Attempting save")
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/game-sessions/${location.state.session.sessionCode}/save`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/game-sessions/${session.sessionCode}/save`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -35,7 +41,7 @@ export function PlayView() {
                     stateBlob: JSON.stringify({ session, players})
                 })
         })
-    }, [session, players])
+    }, [])
 
     useEffect(() => {
         //This is saying, if we have a state session from our React Router, then look into it...
@@ -50,7 +56,7 @@ export function PlayView() {
         //This is an auto-save trigger defaulted to save the game state once every minute (TODO: customizable save interval later)
         const interval = setInterval(saveGame, 60000)
         return () => clearInterval(interval)
-    }, [saveGame])
+    }, [])
 
     return(
         <div>
@@ -71,6 +77,7 @@ export function PlayView() {
                 <br/>
                 <br/>
                 {players.length > 0 && <ScoreTracker player={players[0]} />}
+                {players.length > 0 && <ScoreTracker player={players[1]} />}
             </div>
         </div>
     );
