@@ -1,6 +1,7 @@
 package com.gamemaster.gmapp.controller;
 
 import com.gamemaster.gmapp.dto.SaveGameSessionRequest;
+import com.gamemaster.gmapp.dto.LoadGameSessionResopnse;
 import com.gamemaster.gmapp.model.GameSave;
 import com.gamemaster.gmapp.model.GameSession;
 import com.gamemaster.gmapp.service.GameSessionService;
@@ -39,9 +40,11 @@ public class GameSessionController {
         return gameSessionService.findByGameSessionCode(gameSessionCode);
     }
 
-    //Note: this is a post mapping despite being a load because it updates the active_session_token, and last_update_stamp on the game session
+    /*Note: this is a post mapping despite being a load because it updates the active_session_token, and last_update_stamp on the game session
+    * ~SAJ 7/5/2026 - Updated to return LoadGameSessionResponse DTO so that our response can easily include the latest save state blob
+     */
     @PostMapping("/api/game-sessions/{gameSessionCode}/load")
-    public GameSession loadGameSession(@PathVariable String gameSessionCode) {
+    public LoadGameSessionResopnse loadGameSession(@PathVariable String gameSessionCode) {
         return gameSessionService.loadGameSession(gameSessionCode);
     }
 

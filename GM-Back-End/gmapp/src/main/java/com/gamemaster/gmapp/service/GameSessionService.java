@@ -1,5 +1,6 @@
 package com.gamemaster.gmapp.service;
 
+import com.gamemaster.gmapp.dto.LoadGameSessionResopnse;
 import com.gamemaster.gmapp.dto.SaveGameSessionRequest;
 import com.gamemaster.gmapp.model.GameSave;
 import com.gamemaster.gmapp.model.GameSession;
@@ -98,7 +99,7 @@ public class GameSessionService {
      * @param gameSessionCode
      * @return
      */
-    public GameSession loadGameSession(String gameSessionCode) {
+    public LoadGameSessionResopnse loadGameSession(String gameSessionCode) {
 
         //Load the game session using the provided code
         GameSession gameSession = gameSessionRepository.findBySessionCode(gameSessionCode).orElseThrow(() -> new RuntimeException("No game session found matching the code: " + gameSessionCode + " when attempting to load a game session."));
@@ -106,7 +107,9 @@ public class GameSessionService {
         gameSession.setActiveSessionToken(UUID.randomUUID()); //Update the active_session_token associated with the game session to invalidate previous sessions that had loaded the game
         gameSession.setLastActiveAt(LocalDateTime.now()); //Update the last_active_at Timestamp to now
 
-        return gameSessionRepository.save(gameSession);
+        gameSessionRepository.save(gameSession);
+
+        return new LoadGameSessionResopnse(gameSession, gameSaveService.findLatestSaveByGameSession_Id(gameSession.getId()).getStateBlob());
     }
 
     public String generateGameSessionCode() {

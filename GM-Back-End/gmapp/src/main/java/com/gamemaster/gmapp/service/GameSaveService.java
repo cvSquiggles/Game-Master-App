@@ -49,6 +49,11 @@ public class GameSaveService {
         return gameSaveRepository.findByGameSession_Id(id);
     }
 
+    public GameSave findLatestSaveByGameSession_Id(UUID id)
+    {
+        return gameSaveRepository.findTopByGameSession_IdOrderByCreatedAtDesc(id);
+    }
+
     public GameSave createGameSave(GameSession gameSession, SaveGameSessionRequest request, String saveType)
     {
         GameSave gameSave = new GameSave();

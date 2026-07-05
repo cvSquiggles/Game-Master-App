@@ -11,4 +11,6 @@ public interface GameSaveRepository extends JpaRepository<GameSave, UUID> {
     List<GameSave> findByGameSession_Id(UUID sessionId); //Need derived query method to get all game saves by a provided game session id
 
     List<GameSave> findByGameSession_SessionCode(String gameSessionCode); //Derived query to pull game session via game session code
+
+    GameSave findTopByGameSession_IdOrderByCreatedAtDesc(UUID id); //Derived query to pull the latest game save for a given game session id
 }
