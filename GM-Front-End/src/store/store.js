@@ -6,7 +6,8 @@ const gameSlice = createSlice({
     initialState: {
         session: null,
         players: [],
-        scores: {}
+        scores: {},
+        timers: {}
     },
     reducers: {
         setSession: (state, action) => {
@@ -21,11 +22,15 @@ const gameSlice = createSlice({
         },
         setScores: (state, action) => {
             state.scores = action.payload
-        } //Added to replace the entire array of player scores, rather than updating each separately
+        }, //Added to replace the entire array of player scores, rather than updating each separately
+        setTimer: (state, action) => {
+            const { timerId, timerState } = action.payload
+            state.timers[timerId] = timerState
+        }
     }
 })
 
-export const { setSession, setPlayers, setScore, setScores } = gameSlice.actions
+export const { setSession, setPlayers, setScore, setScores, setTimer } = gameSlice.actions
 
 export const store = configureStore({
     reducer: {

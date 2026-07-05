@@ -1,8 +1,9 @@
 import { useEffect, useCallback, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux' //Import useSelector (used to read state) and useDispatch (used to trigger state changes, rather than calling setters directly)
-import { setSession, setPlayers, setScore, setScores } from '../store/store'
+import { setSession, setPlayers, setScore, setScores, setTimer } from '../store/store'
 import ScoreTracker from '../components/ScoreTracker'
+import Timer from '../components/Timer'
 
 export function PlayView() {
     const location = useLocation()
@@ -12,11 +13,12 @@ export function PlayView() {
     const session = useSelector(state => state.game.session) //state.slice-name.state-variable
     const players = useSelector(state => state.game.players)
     const scores = useSelector(state => state.game.scores)
+    const timers = useSelector(state => state.game.timers)
 
-    const stateRef = useRef({ session, players, scores }) //this allows us to access a reference to the current state, rather than having a local and potentially stale version of the state value
+    const stateRef = useRef({ session, players, scores, timers }) //this allows us to access a reference to the current state, rather than having a local and potentially stale version of the state value
     useEffect(() => {
-        stateRef.current = { session, players, scores }
-    }, [session, players, scores]) //update stateRef.current whenever session, or players gets updated
+        stateRef.current = { session, players, scores, timers }
+    }, [session, players, scores, timers]) //update stateRef.current whenever session, or players gets updated
     
     //Removed lines pulling setters from the zustand store, redux doesn't require pulling the setters directly
 
@@ -32,7 +34,7 @@ export function PlayView() {
 
     //This is a function that will be used to handle both manual and auto saves, added "useCallBack" so the function isn't recreated on every render of this component, bug was creating thousands of saves!
     const saveGame = useCallback(async () => {
-        const { session, players, scores } = stateRef.current
+        const { session, players, scores, timers } = stateRef.current
         console.log("Attempting save")
         console.log(session)
         const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/game-sessions/${session.sessionCode}/save`, {
@@ -40,7 +42,7 @@ export function PlayView() {
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({
                     activeSessionToken: session.activeSessionToken,
-                    stateBlob: JSON.stringify({ session, players, scores})
+                    stateBlob: JSON.stringify({ session, players, scores, timers })
                 })
         })
     }, [])
@@ -49,8 +51,6 @@ export function PlayView() {
         //This is saying, if we have a state session from our React Router, then look into it...
         if (location.state?.session) {
             //...and then set the values in the global store equal to the values in the React Router state
-            console.log("Here's the location.state session")
-            console.log(location.state?.session)
             dispatch(setSession(location.state.session)) //This is where we're calling the global store functions above to set the values on page load ~updated to redux dispatch setter
             if(location.state?.players)
             {
@@ -66,6 +66,20 @@ export function PlayView() {
                 if(savedState.scores)
                 {
                     dispatch(setScores(savedState.scores))
+                }
+
+                console.log("v")
+                console.log(savedState)
+                console.log("^")
+
+                if(savedState.timers) //If we have timers...
+                {
+                    Object.keys(savedState.timers).forEach(timerId => { //...loop through them, and set each...
+                        dispatch(setTimer({
+                            timerId,
+                            timerState: { ...savedState.timers[timerId], status: 'paused'} //...setting status to paused if it wasn't already
+                        }))
+                    }) //We have to loop through, because we can't just use the savedState.timers directly, since we have to set them to paused, so a bulk setTimers doesn't make sense here
                 }
             }
         }
@@ -97,6 +111,8 @@ export function PlayView() {
                 <br/>
                 {players.length > 0 && <ScoreTracker player={players[0]} />}
                 {players.length > 0 && <ScoreTracker player={players[1]} />}
+                <br/>
+                <Timer timerId="mainTimer" durationMs={90000} />
             </div>
         </div>
     );
